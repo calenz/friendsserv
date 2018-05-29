@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 // Connect to the db
-MongoClient.connect(mongodburl, function(err, client) {
+MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client) {
     if (err) {
         return console.dir(err);
     }
@@ -31,8 +31,8 @@ MongoClient.connect(mongodburl, function(err, client) {
         if (err) throw err;
         db.collection('blocklist').createIndex( { "requestor": 1, "target": 1 }, { unique: true } );
     });
-    app.listen(3000, () => {
-        console.log('listening on 3000');
+    app.listen(process.env.PORT || 3000, () => {
+        console.log('listening...');
     })
 });
 
@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 app.post('/friends/connect', (req, res) => {
     console.log('Create Friend Connection API Request: '+req.body.friends);
     if (req.body.friends && req.body.friends.length >= 2) {         
-        MongoClient.connect(mongodburl, function(err, client) {
+        MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client) {
             if (err) {
                 res.status(500).send(err);
                 return console.dir(err);
@@ -94,7 +94,7 @@ app.post('/friends/connect', (req, res) => {
 app.post('/friends/list', (req, res) => {
     console.log('Friends List API Request: '+req.body.email);
     if (req.body.email) {
-        MongoClient.connect(mongodburl, function(err, client) {
+        MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client) {
             if (err) {
                 res.status(500).send(err);
                 return console.dir(err);
@@ -132,7 +132,7 @@ app.post('/friends/list', (req, res) => {
 app.post('/friends/common', (req, res) => {
     console.log('Common Friends List API Request: '+req.body.friends);
     if (req.body.friends && req.body.friends.length >= 2) {         
-        MongoClient.connect(mongodburl, function(err, client) {
+        MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client) {
             if (err) {
                 res.status(500).send(err);
                 return console.dir(err);
@@ -190,7 +190,7 @@ app.post('/friends/common', (req, res) => {
 app.post('/friends/subscribe', (req, res) => {
     console.log('Subscribe to Email API Request: '+req.body.requestor+', '+req.body.target);
     if (req.body.requestor && req.body.target) {         
-        MongoClient.connect(mongodburl, function(err, client) {
+        MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client) {
             if (err) {
                 res.status(500).send(err);
                 return console.dir(err);
@@ -239,7 +239,7 @@ app.post('/friends/subscribe', (req, res) => {
 app.post('/friends/block', (req, res) => {
     console.log('Block Updates from Email API Request: '+req.body.requestor+', '+req.body.target);
     if (req.body.requestor && req.body.target) {
-        MongoClient.connect(mongodburl, function(err, client) {
+        MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client) {
             if (err) {
                 res.status(500).send(err);
                 return console.dir(err);
@@ -297,7 +297,7 @@ function GetEmailsFromString(input) {
 app.post('/friends/listemails', (req, res) => {
     console.log('List Eligible Emails for Updates API Request: '+req.body.sender+','+req.body.text);
     if (req.body.sender && req.body.text) {
-        MongoClient.connect(mongodburl, function(err, client) {
+        MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client) {
             if (err) {
                 return console.dir(err);
             }
