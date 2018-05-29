@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "78ae50e2-7686-4404-b6a2-c2b694e49c18",
+		"name": "FriendsServ APIs",
+		"description": "https://gist.github.com/winston/51d26e4587b5e0bbf03fcad558111c08",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Friend Connection",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"friends\": [\n  \t\"vivian@example.com\", \"john@example.com\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "{{friendsserv_url}}/friends/connect",
+					"host": [
+						"{{friendsserv_url}}"
+					],
+					"path": [
+						"friends",
+						"connect"
+					]
+				},
+				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Friend List",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"jane@example.com\"\n}"
+				},
+				"url": {
+					"raw": "{{friendsserv_url}}/friends/list",
+					"host": [
+						"{{friendsserv_url}}"
+					],
+					"path": [
+						"friends",
+						"list"
+					]
+				},
+				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
+			},
+			"response": []
+		}
+	]
+}
