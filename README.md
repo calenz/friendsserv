@@ -17,6 +17,7 @@ NodeJS, Express, MongoDB coding exercise
 - _id
 - email1
 - email2
+
 Note: Used /friends/connect API multiple times to create the connection records
 e.g.
 ```
@@ -41,6 +42,7 @@ e.g.
 - _id
 - requestor
 - target
+
 Note: Used /friends/subscribe API multiple times to create the subscription records
 e.g.
 ```
@@ -60,6 +62,7 @@ e.g.
 - _id
 - requestor
 - target
+
 Note: Used /friends/block API multiple times to create the blocklist records
 e.g.
 ```
@@ -82,26 +85,31 @@ e.g.
 API: POST {{friendsserv_url}}/friends/connect
 
 Sample Request:
+```
 {
   "friends": [
   	"john@example.com", "felicia@example.com"
   ]
 }
-
+```
 Sample Response:
+```
 {
     "success": true
 }
+```
 
 2. As a user, I need an API to retrieve the friends list for an email address.
 API: POST {{friendsserv_url}}/friends/list
 
 Sample Request:
+```
 {
   "email": "john@example.com"
 }
-
+```
 Sample Response:
+```
 {
     "success": true,
     "friends": [
@@ -112,18 +120,21 @@ Sample Response:
     ],
     "count": 4
 }
+```
 
 3. As a user, I need an API to retrieve the common friends list between two email addresses.
 API: POST {{friendsserv_url}}/friends/common
 
 Sample Request:
+```
 {
   "friends": [
   	"vivian@example.com", "john@example.com"
   ]
 }
-
+```
 Sample Response:
+```
 {
     "success": true,
     "friends": [
@@ -133,35 +144,41 @@ Sample Response:
     ],
     "count": 3
 }
+```
 
 4. As a user, I need an API to subscribe to updates from an email address.
 API: POST {{friendsserv_url}}/friends/subscribe
 
 Sample Request:
+```
 {
   "requestor": "vivian@example.com",
   "target": "andy@example.com"
 }
-
+```
 Sample Response:
+```
 {
     "success": true
 }
+```
 
 5. As a user, I need an API to block updates from an email address.
 API: POST {{friendsserv_url}}/friends/block
 
 Sample Request:
+```
 {
   "requestor": "vivian@example.com",
   "target": "john@example.com"
 }
-
+```
 Sample Response:
+```
 {
     "success": true
 }
-
+```
 
 
 
