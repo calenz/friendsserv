@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"friends\": [\n  \t\"vivian@example.com\", \"john@example.com\"\n  ]\n}"
+					"raw": "{\n  \"friends\": [\n  \t\"john@example.com\", \"peter@example.com\"\n  ]\n}"
 				},
 				"url": {
 					"raw": "{{friendsserv_url}}/friends/connect",
@@ -35,7 +35,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Friend List",
+			"name": "Get Friends List",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -46,7 +46,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"jane@example.com\"\n}"
+					"raw": "{\n  \"email\": \"john@example.com\"\n}"
 				},
 				"url": {
 					"raw": "{{friendsserv_url}}/friends/list",
@@ -56,6 +56,90 @@
 					"path": [
 						"friends",
 						"list"
+					]
+				},
+				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
+			},
+			"response": []
+		},
+		{
+			"name": "Common Friends List",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"friends\": [\n  \t\"vivian@example.com\", \"john@example.com\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "{{friendsserv_url}}/friends/common",
+					"host": [
+						"{{friendsserv_url}}"
+					],
+					"path": [
+						"friends",
+						"common"
+					]
+				},
+				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
+			},
+			"response": []
+		},
+		{
+			"name": "Subscribe to Email",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"requestor\": \"john@example.com\",\n  \"target\": \"felicia@example.com\"\n}"
+				},
+				"url": {
+					"raw": "{{friendsserv_url}}/friends/subscribe",
+					"host": [
+						"{{friendsserv_url}}"
+					],
+					"path": [
+						"friends",
+						"subscribe"
+					]
+				},
+				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
+			},
+			"response": []
+		},
+		{
+			"name": "Block Updates from Email",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"requestor\": \"felicia@example.com\",\n  \"target\": \"andy@example.com\"\n}"
+				},
+				"url": {
+					"raw": "{{friendsserv_url}}/friends/block",
+					"host": [
+						"{{friendsserv_url}}"
+					],
+					"path": [
+						"friends",
+						"block"
 					]
 				},
 				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
