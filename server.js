@@ -2,8 +2,7 @@ const express = require('express');
 const bodyParser= require('body-parser');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
-const mongodbdbname = "friendsserv";
-const mongodburl = "mongodb://localhost:27017/"+mongodbdbname;
+const mongodburl = "mongodb://localhost:27017/friendsserv";
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -18,7 +17,7 @@ MongoClient.connect(process.env.MONGODB_URI || mongodburl, function(err, client)
         return console.dir(err);
     }
     console.log("We are connected");
-    db = client.db(mongodbdbname);
+    db = client.db();
     db.createCollection("connections", function (err, res) {
         if (err) throw err;
         db.collection('connections').createIndex( { "email1": 1, "email2": 1 }, { unique: true } );
@@ -49,7 +48,7 @@ app.post('/friends/connect', (req, res) => {
                 res.status(500).send(err);
                 return console.dir(err);
             }
-            db = client.db(mongodbdbname);            
+            db = client.db();            
             // check if a connection already exists, check both emails in 2 direction
             db.collection('connections').find( {$or: [{email1: req.body.friends[0], email2: req.body.friends[1]}, 
                 {email2: req.body.friends[0], email1: req.body.friends[1]}] }).toArray(function(err, results) {
@@ -99,7 +98,7 @@ app.post('/friends/list', (req, res) => {
                 res.status(500).send(err);
                 return console.dir(err);
             }
-            db = client.db(mongodbdbname);
+            db = client.db();
             db.collection('connections').find( {$or: [{email1: req.body.email}, {email2: req.body.email}] }).toArray(function(err, results) {
                 var intCount = results.length;
                 if (intCount >= 0) {
@@ -137,7 +136,7 @@ app.post('/friends/common', (req, res) => {
                 res.status(500).send(err);
                 return console.dir(err);
             }
-            db = client.db(mongodbdbname);            
+            db = client.db();            
             var friendsArray1 = []; 
             // get friends list of 1st email
             db.collection('connections').find( {$or: [{email1: req.body.friends[0]}, {email2: req.body.friends[0]}] }).toArray(function(err, results) {
@@ -195,7 +194,7 @@ app.post('/friends/subscribe', (req, res) => {
                 res.status(500).send(err);
                 return console.dir(err);
             }
-            db = client.db(mongodbdbname);
+            db = client.db();
             // check if a subscription already exists
             db.collection('subscriptions').find( {requestor: req.body.requestor, target: req.body.target} ).toArray(function(err, results) {
                 if (results != null && results.length > 0) {
@@ -244,7 +243,7 @@ app.post('/friends/block', (req, res) => {
                 res.status(500).send(err);
                 return console.dir(err);
             }
-            db = client.db(mongodbdbname);
+            db = client.db();
             // check if a block record already exists
             db.collection('blocklist').find( {requestor: req.body.requestor, target: req.body.target} ).toArray(function(err, results) {                
                 if (results != null && results.length > 0) {
