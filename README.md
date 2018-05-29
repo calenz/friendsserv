@@ -3,7 +3,7 @@
 NodeJS, Express, MongoDB coding exercise
 
 - Run MongoDB locally on localhost:27017
-- Pull files from https://github.com/calenz/friendsserv master branch and save to a local folder, e.g. friendsserv
+- Clone files from https://github.com/calenz/friendsserv master branch and save to a local folder, e.g. friendsserv
 - Navigate to 'friendsserv' subdirectory in Terminal
 - Run "npm install"
 - Run "node server.js" and server will be listening on port 3000
@@ -11,9 +11,15 @@ NodeJS, Express, MongoDB coding exercise
 - Import "FriendsServ APIs.postman_collection.json" to run the APIs and ensure 'FriendsServ Localhost' environment is selected in the dropdown
 
 ## Sample Data in MongoDB
-###Schema: Connections
-* Used /friends/connect API multiple times to create the connection records
+### Schema
 
+#### 1. Connections
+- _id
+- email1
+- email2
+Note: Used /friends/connect API multiple times to create the connection records
+e.g.
+```
 { 
     "_id" : ObjectId("5b098519bfbe9184d596ed1f"), 
     "email1" : "andy@example.com", 
@@ -29,36 +35,46 @@ NodeJS, Express, MongoDB coding exercise
     "email1" : "andy@example.com", 
     "email2" : "peter@example.com"
 }
+```
+
+#### 2. Subscriptions
+- _id
+- requestor
+- target
+Note: Used /friends/subscribe API multiple times to create the subscription records
+e.g.
+```
 { 
-    "_id" : ObjectId("5b0cbf7991f30533a895a126"), 
-    "email1" : "vivian@example.com", 
-    "email2" : "peter@example.com"
+    "_id" : ObjectId("5b0cf7b57d92783a9d1f26ed"), 
+    "requestor" : "peter@example.com", 
+    "target" : "vivian@example.com"
 }
 { 
-    "_id" : ObjectId("5b0cbf7d91f30533a895a127"), 
-    "email1" : "vivian@example.com", 
-    "email2" : "jane@example.com"
+    "_id" : ObjectId("5b0cf7ec7657043aa7aed39d"), 
+    "requestor" : "jane@example.com", 
+    "target" : "vivian@example.com"
+}
+```
+
+#### 3. Blocklist
+- _id
+- requestor
+- target
+Note: Used /friends/block API multiple times to create the blocklist records
+e.g.
+```
+{ 
+    "_id" : ObjectId("5b0d03ab0f04323be69df4e1"), 
+    "requestor" : "vivian@example.com", 
+    "target" : "john@example.com"
 }
 { 
-    "_id" : ObjectId("5b0cbfa891f30533a895a128"), 
-    "email1" : "vivian@example.com", 
-    "email2" : "felicia@example.com"
+    "_id" : ObjectId("5b0d03eb90dde03bf3fd0fa1"), 
+    "requestor" : "felicia@example.com", 
+    "target" : "andy@example.com"
 }
-{ 
-    "_id" : ObjectId("5b0cbfac91f30533a895a129"), 
-    "email1" : "jane@example.com", 
-    "email2" : "felicia@example.com"
-}
-{ 
-    "_id" : ObjectId("5b0cc1ce61ba2433c514267c"), 
-    "email1" : "peter@example.com", 
-    "email2" : "john@example.com"
-}
-{ 
-    "_id" : ObjectId("5b0cc54b9a7e8b33f77e8440"), 
-    "email1" : "john@example.com", 
-    "email2" : "vivian@example.com"
-}
+
+```
 
 ## Sample API Calls
 
