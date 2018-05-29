@@ -1,6 +1,6 @@
 # FriendsServ
 
-NodeJS, Express, MongoDB coding exercise
+NodeJS, Express, MongoDB coding exercise from https://gist.github.com/winston/51d26e4587b5e0bbf03fcad558111c08
 
 - Run MongoDB locally on localhost:27017
 - Clone files from https://github.com/calenz/friendsserv master branch and save to a local folder, e.g. friendsserv
@@ -18,7 +18,7 @@ NodeJS, Express, MongoDB coding exercise
 - email1
 - email2
 
-Note: Used /friends/connect API multiple times to create the connection records
+Note: Use /friends/connect API multiple times to create the connection records
 e.g.
 ```
 { 
@@ -43,7 +43,7 @@ e.g.
 - requestor
 - target
 
-Note: Used /friends/subscribe API multiple times to create the subscription records
+Note: Use /friends/subscribe API multiple times to create the subscription records
 e.g.
 ```
 { 
@@ -63,7 +63,7 @@ e.g.
 - requestor
 - target
 
-Note: Used /friends/block API multiple times to create the blocklist records
+Note: Use /friends/block API multiple times to create the blocklist records
 e.g.
 ```
 { 
@@ -81,7 +81,7 @@ e.g.
 
 ## Sample API Calls
 
-1. As a user, I need an API to create a friend connection between two email addresses.
+### 1. As a user, I need an API to create a friend connection between two email addresses.
 API: POST {{friendsserv_url}}/friends/connect
 
 Sample Request:
@@ -99,7 +99,7 @@ Sample Response:
 }
 ```
 
-2. As a user, I need an API to retrieve the friends list for an email address.
+### 2. As a user, I need an API to retrieve the friends list for an email address.
 API: POST {{friendsserv_url}}/friends/list
 
 Sample Request:
@@ -122,7 +122,7 @@ Sample Response:
 }
 ```
 
-3. As a user, I need an API to retrieve the common friends list between two email addresses.
+### 3. As a user, I need an API to retrieve the common friends list between two email addresses.
 API: POST {{friendsserv_url}}/friends/common
 
 Sample Request:
@@ -146,7 +146,7 @@ Sample Response:
 }
 ```
 
-4. As a user, I need an API to subscribe to updates from an email address.
+### 4. As a user, I need an API to subscribe to updates from an email address.
 API: POST {{friendsserv_url}}/friends/subscribe
 
 Sample Request:
@@ -163,7 +163,7 @@ Sample Response:
 }
 ```
 
-5. As a user, I need an API to block updates from an email address.
+### 5. As a user, I need an API to block updates from an email address.
 API: POST {{friendsserv_url}}/friends/block
 
 Sample Request:
@@ -180,9 +180,29 @@ Sample Response:
 }
 ```
 
+### 6. As a user, I need an API to retrieve all email addresses that can receive updates from an email address.
+API: POST {{friendsserv_url}}/friends/listemails
 
-
-
+Sample Request:
+```
+{
+  "sender":  "john@example.com",
+  "text": "Hello World! vivian@example.com kate@example.com jane@example.com welcome!"
+}
+```
+Sample Response:
+```
+{
+    "success": true,
+    "recipients": [
+        "andy@example.com",
+        "peter@example.com",
+        "felicia@example.com",
+        "kate@example.com",
+        "jane@example.com"
+    ]
+}
+```
 
 
 

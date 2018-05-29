@@ -46,6 +46,7 @@ app.post('/friends/connect', (req, res) => {
     if (req.body.friends && req.body.friends.length >= 2) {         
         MongoClient.connect(mongodburl, function(err, client) {
             if (err) {
+                res.status(500).send(err);
                 return console.dir(err);
             }
             db = client.db(mongodbdbname);            
@@ -95,6 +96,7 @@ app.post('/friends/list', (req, res) => {
     if (req.body.email) {
         MongoClient.connect(mongodburl, function(err, client) {
             if (err) {
+                res.status(500).send(err);
                 return console.dir(err);
             }
             db = client.db(mongodbdbname);
@@ -132,6 +134,7 @@ app.post('/friends/common', (req, res) => {
     if (req.body.friends && req.body.friends.length >= 2) {         
         MongoClient.connect(mongodburl, function(err, client) {
             if (err) {
+                res.status(500).send(err);
                 return console.dir(err);
             }
             db = client.db(mongodbdbname);            
@@ -189,6 +192,7 @@ app.post('/friends/subscribe', (req, res) => {
     if (req.body.requestor && req.body.target) {         
         MongoClient.connect(mongodburl, function(err, client) {
             if (err) {
+                res.status(500).send(err);
                 return console.dir(err);
             }
             db = client.db(mongodbdbname);
@@ -234,9 +238,10 @@ app.post('/friends/subscribe', (req, res) => {
 // 5. As a user, I need an API to block updates from an email address.
 app.post('/friends/block', (req, res) => {
     console.log('Block Updates from Email API Request: '+req.body.requestor+', '+req.body.target);
-    if (req.body.requestor && req.body.target) {         
+    if (req.body.requestor && req.body.target) {
         MongoClient.connect(mongodburl, function(err, client) {
             if (err) {
+                res.status(500).send(err);
                 return console.dir(err);
             }
             db = client.db(mongodbdbname);
@@ -275,5 +280,87 @@ app.post('/friends/block', (req, res) => {
         });
     } else {
         res.status(500).send('Invalid requestor and target!');
+    }        
+})
+
+function GetEmailsFromString(input) {
+    var ret = [];
+    var email = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
+    var match;
+    while (match = email.exec(input)) {
+      ret.push(match[1]);
+    }
+    return ret;
+  }
+
+// 6. As a user, I need an API to retrieve all email addresses that can receive updates from an email address.
+app.post('/friends/listemails', (req, res) => {
+    console.log('List Eligible Emails for Updates API Request: '+req.body.sender+','+req.body.text);
+    if (req.body.sender && req.body.text) {
+        MongoClient.connect(mongodburl, function(err, client) {
+            if (err) {
+                return console.dir(err);
+            }
+            // extract emails from text            
+            var extractedEmailsArray = GetEmailsFromString(req.body.text);
+            console.log("req.body.text: "+req.body.text);
+            console.log("extractedEmailsArray: "+extractedEmailsArray);            
+            // get friends list of sender
+            var recipientsArray = [];
+            db.collection('connections').find( {$or: [{email1: req.body.sender}, {email2: req.body.sender}] }).toArray(function(err, results) {
+                if (results!= null) {
+                    for (var i = 0; i < results.length; i++) {                        
+                        var friendemail = results[i].email2;
+                        // make sure email is not own email, if it is, then friend's email is in email1 field
+                        if (req.body.sender == friendemail) {
+                            friendemail = results[i].email1
+                        }
+                        recipientsArray.push(friendemail);                        
+                    }
+                }
+                // get emails subscribed to sender
+                db.collection('subscriptions').find( {target: req.body.sender} ).toArray(function(err, results) {                
+                    if (results!= null) {
+                        for (var i = 0; i < results.length; i++) {                        
+                            recipientsArray.push(results[i].requestor);                        
+                        }
+                    }
+                    // add on emails mentioned in the text
+                    for (var i = 0; i < extractedEmailsArray.length; i++) {                        
+                        recipientsArray.push(extractedEmailsArray[i]);                        
+                    }
+                    // make unique array
+                    var uniqueRecipientsArray = [...new Set(recipientsArray)]
+                    // remove those emails in the blocklist
+                    db.collection('blocklist').find( {$or: [{requestor: req.body.sender}, 
+                        {target: req.body.sender}] }).toArray(function(err, results) {                
+                        if (results != null) {
+                            for (var i = 0; i < results.length; i++) {                        
+                                console.log("blocked: "+results[i].requestor);
+                                // remove blocked email from uniqueRecipientsArray
+                                var foundindex = uniqueRecipientsArray.indexOf(results[i].requestor);
+                                if (foundindex !== -1) {
+                                    uniqueRecipientsArray.splice(foundindex, 1);
+                                }
+                            }                            
+                        }
+                        client.close();
+                        var strJson = "";
+                        for (var i = 0; i < uniqueRecipientsArray.length; i++) {                        
+                            if (strJson == "") {
+                                strJson += '"' + uniqueRecipientsArray[i] + '"';
+                            } else {
+                                strJson += ',"' + uniqueRecipientsArray[i] + '"';
+                            }                            
+                        }
+                        strJson = '{"success": true, "recipients": [' + strJson + ']}'
+                        console.log("List Eligible Emails for Updates strJson: \n"+strJson);
+                        res.json(JSON.parse(strJson));                        
+                    }); 
+                }); 
+            });       
+        });
+    } else {
+        res.status(500).send('Less than 2 email addresses!');
     }        
 })

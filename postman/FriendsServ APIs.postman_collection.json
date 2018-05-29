@@ -145,6 +145,34 @@
 				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
 			},
 			"response": []
+		},
+		{
+			"name": "List Eligible Emails for Updates",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\":  \"john@example.com\",\n  \"text\": \"Hello World! vivian@example.com kate@example.com jane@example.com welcome!\"\n}"
+				},
+				"url": {
+					"raw": "{{friendsserv_url}}/friends/listemails",
+					"host": [
+						"{{friendsserv_url}}"
+					],
+					"path": [
+						"friends",
+						"listemails"
+					]
+				},
+				"description": "1. As a user, I need an API to create a friend connection between two email addresses."
+			},
+			"response": []
 		}
 	]
 }
